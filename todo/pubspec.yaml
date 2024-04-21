@@ -1,0 +1,36 @@
+name: todo
+description: "A new Flutter project."
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.3.4 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  lottie: ^3.1.0
+  animate_do: ^3.3.4
+  hive: ^2.0.4
+  hive_flutter: ^1.1.0
+  uuid: ^3.0.5
+  intl: ^0.17.0
+  flutter_datetime_picker: ^1.5.1
+  flutter_beautiful_popup: ^1.7.0
+  panara_dialogs: ^0.1.2
+  ftoast: ^2.0.0
+  flutter_slider_drawer: ^2.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: 2.0.1
+  hive_generator: 1.1.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/img/
+    - assets/lottie/
