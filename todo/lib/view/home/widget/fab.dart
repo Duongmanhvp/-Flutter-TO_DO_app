@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo/view/tasks/task_screen.dart';
 
 class FAB extends StatelessWidget {
   const FAB({
@@ -8,7 +10,10 @@ class FAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context, CupertinoPageRoute(builder: (_) => const TaskScreen()));
+      },
       child: Material(
         borderRadius: BorderRadius.circular(10.0),
         elevation: 10.0,

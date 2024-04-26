@@ -22,6 +22,7 @@ dependencies:
   ftoast: ^2.0.0
   flutter_slider_drawer: ^2.1.1
   sidebarx: ^0.17.1
+  flutter_cupertino_date_picker_fork: ^1.0.7
 
 dev_dependencies:
   flutter_test:
