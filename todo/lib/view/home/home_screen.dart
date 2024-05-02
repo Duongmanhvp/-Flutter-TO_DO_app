@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: HomeAppBar(
           drawerKey: drawerKey,
         ),
-        child: MainHomeScreen(testing: testing),
+        child: MainHomeScreen(),
       ),
     );
   }

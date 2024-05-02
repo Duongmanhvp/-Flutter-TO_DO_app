@@ -1,20 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
+import 'package:intl/intl.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/utils/strings.dart';
 import 'package:todo/view/tasks/components/date_time_picker.dart';
 import 'package:todo/view/tasks/components/text_form_field.dart';
 import 'package:todo/view/tasks/widgets/task_app_bar.dart';
 
 class TaskScreen extends StatefulWidget {
-  const TaskScreen({super.key});
+  const TaskScreen({
+    super.key,
+    required this.titleController,
+    required this.descriptionController,
+    required this.task,
+  });
+
+  final TextEditingController? titleController;
+  final TextEditingController? descriptionController;
+  final Task? task;
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
+  var title;
+  var subTitle;
+  DateTime? date;
+  DateTime? time;
+
+  String showTime(DateTime? time) {
+    if (widget.task?.createdTime == null) {
+      if (time == null) {
+        return DateFormat('hh:mm a').format(DateTime.now()).toString();
+      } else {
+        return DateFormat('hh:mm a').format(time).toString();
+      }
+    } else {
+      return DateFormat('hh:mm a').format(widget.task!.createdTime).toString();
+    }
+  }
+
+  String showDate(DateTime? date) {
+    if (widget.task?.createdDate == null) {
+      if (date == null) {
+        return DateFormat.yMMMEd().format(DateTime.now()).toString();
+      } else {
+        return DateFormat.yMMMEd().format(date).toString();
+      }
+    } else {
+      return DateFormat.yMMMEd().format(widget.task!.createdDate).toString();
+    }
+  }
+
+  bool isTaskAlreadyExist() {
+    if (widget.titleController?.text == null &&
+        widget.descriptionController?.text == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,13 +161,29 @@ class _TaskScreenState extends State<TaskScreen> {
               ),
             ),
           ),
-          CustomTextField(controller: titleController),
+          // task tile
+          CustomTextField(
+            controller: widget.titleController,
+            onFieldSubmitted: (String _title) {
+              title = _title;
+            },
+            onChanged: (String _title) {
+              title = _title;
+            },
+          ),
           const SizedBox(
             height: 20,
           ),
+          // task subtitle
           CustomTextField(
-            controller: descriptionController,
+            controller: widget.descriptionController,
             isDescription: true,
+            onFieldSubmitted: (String _subTitle) {
+              subTitle = _subTitle;
+            },
+            onChanged: (String _subTitle) {
+              subTitle = _subTitle;
+            },
           ),
           const SizedBox(
             height: 20,
@@ -132,11 +194,25 @@ class _TaskScreenState extends State<TaskScreen> {
                 context: context,
                 builder: (_) => SizedBox(
                   height: 280,
-                  child: TimePickerWidget(),
+                  child: TimePickerWidget(
+                    dateFormat: "HH:mm",
+                    onChange: (_, __) {},
+                    onConfirm: (dateTime, _) {
+                      setState(() {
+                        if (widget.task?.createdTime == null) {
+                          time = dateTime;
+                        } else {
+                          widget.task!.createdTime = dateTime;
+                        }
+                      });
+                    },
+                  ),
                 ),
               );
             },
             title: MyString.timeStr,
+            time: showTime(time),
+            isDate: false,
           ),
           DateTimeSelectionWidget(
             onTap: () {
@@ -144,10 +220,19 @@ class _TaskScreenState extends State<TaskScreen> {
                 context,
                 minDateTime: DateTime.now(),
                 maxDateTime: DateTime(2100, 12, 31),
-                onConfirm: (dateTime, _) {},
+                onConfirm: (dateTime, _) {
+                  setState(() {
+                    if (widget.task?.createdDate == null) {
+                      date = dateTime;
+                    } else {
+                      widget.task!.createdDate = dateTime;
+                    }
+                  });
+                },
               );
             },
             title: MyString.dateStr,
+            time: showDate(date),
           ),
         ],
       ),
@@ -169,14 +254,14 @@ class _TaskScreenState extends State<TaskScreen> {
             ),
           ),
           RichText(
-            text: const TextSpan(
-              text: "Add New ",
-              style: TextStyle(
+            text: TextSpan(
+              text: isTaskAlreadyExist() ? "Add New " : "Update ",
+              style: const TextStyle(
                 fontWeight: FontWeight.w300,
                 fontSize: 40.0,
                 color: Colors.black,
               ),
-              children: [
+              children: const [
                 TextSpan(
                     text: "Task",
                     style: TextStyle(

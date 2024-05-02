@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:todo/utils/constants.dart';
 
 class HomeAppBar extends StatefulWidget {
   const HomeAppBar({super.key, required this.drawerKey});
@@ -69,7 +70,9 @@ class _HomeAppBarState extends State<HomeAppBar>
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  deleteAllTask(context);
+                },
                 icon: const Icon(
                   CupertinoIcons.trash_circle,
                   size: 40,

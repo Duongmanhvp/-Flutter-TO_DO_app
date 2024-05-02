@@ -6,10 +6,14 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.controller,
     this.isDescription = false,
+    required this.onFieldSubmitted,
+    required this.onChanged,
   });
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final bool isDescription;
+  final Function(String)? onFieldSubmitted;
+  final Function(String)? onChanged;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,8 +39,8 @@ class CustomTextField extends StatelessWidget {
             ),
           ),
         ),
-        onFieldSubmitted: (value) {},
-        onChanged: (value) {},
+        onFieldSubmitted: onFieldSubmitted,
+        onChanged: onChanged,
       ),
     );
   }

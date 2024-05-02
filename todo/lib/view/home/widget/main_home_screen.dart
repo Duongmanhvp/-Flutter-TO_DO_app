@@ -1,15 +1,16 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:todo/models/task.dart';
 import 'package:todo/view/home/widget/task_widget.dart';
 
 class MainHomeScreen extends StatelessWidget {
-  const MainHomeScreen({
+  MainHomeScreen({
     super.key,
-    required this.testing,
+    //required this.testing,
   });
 
-  final List<int> testing;
+  final List<int> testing = [1, 2];
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +109,16 @@ class MainHomeScreen extends StatelessWidget {
                               )
                             ],
                           ),
-                          child: const TaskWidget());
+                          child: TaskWidget(
+                            task: Task(
+                              id: "1",
+                              title: "IT nihongo",
+                              subTitle: "dcm",
+                              createdTime: DateTime.now(),
+                              createdDate: DateTime.now(),
+                              isCompleted: false,
+                            ),
+                          ));
                     })
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,

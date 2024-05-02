@@ -1,9 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:todo/models/task.dart';
 
-class TaskWidget extends StatelessWidget {
+class TaskWidget extends StatefulWidget {
   const TaskWidget({
     super.key,
+    required this.task,
   });
+
+  final Task task;
+
+  @override
+  State<TaskWidget> createState() => _TaskWidgetState();
+}
+
+class _TaskWidgetState extends State<TaskWidget> {
+  TextEditingController textEditingControllerTitle = TextEditingController();
+  TextEditingController textEditingControllerSubTitle = TextEditingController();
+
+  @override
+  void initState() {
+    textEditingControllerTitle.text = widget.task.title;
+    textEditingControllerSubTitle.text = widget.task.subTitle;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    textEditingControllerTitle.dispose();
+    textEditingControllerSubTitle.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +42,7 @@ class TaskWidget extends StatelessWidget {
           vertical: 8.0,
         ),
         decoration: BoxDecoration(
-          color: Colors.blue.withOpacity(0.3),
+          color: widget.task.isCompleted ? Colors.blue[200] : Colors.white,
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
@@ -32,8 +59,11 @@ class TaskWidget extends StatelessWidget {
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 600),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: widget.task.isCompleted ? Colors.blue : Colors.white,
                 borderRadius: BorderRadius.circular(15.0),
+                border: Border.all(
+                  color: Colors.grey,
+                ),
               ),
               child: const Icon(
                 Icons.check,
@@ -43,13 +73,14 @@ class TaskWidget extends StatelessWidget {
           ),
 
           // Task title
-          title: const Text(
-            "Done",
+          title: Text(
+            textEditingControllerTitle.text,
             style: TextStyle(
-              color: Colors.black,
+              color: widget.task.isCompleted ? Colors.blue : Colors.black,
               fontWeight: FontWeight.w500,
               fontSize: 18.0,
-              //decoration: TextDecoration.lineThrough),
+              decoration:
+                  widget.task.isCompleted ? TextDecoration.lineThrough : null,
             ),
           ),
 
@@ -58,7 +89,7 @@ class TaskWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Describe",
+                textEditingControllerSubTitle.text,
                 style: TextStyle(
                   color: Colors.black.withOpacity(0.5),
                   fontWeight: FontWeight.w300,
@@ -74,16 +105,20 @@ class TaskWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        "Date",
+                        DateFormat('hh:mm a').format(widget.task.createdDate),
                         style: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
+                          color: widget.task.isCompleted
+                              ? Colors.white
+                              : Colors.black.withOpacity(0.7),
                           fontWeight: FontWeight.w300,
                         ),
                       ),
                       Text(
-                        "SubDate",
+                        DateFormat.yMMMEd().format(widget.task.createdDate),
                         style: TextStyle(
-                          color: Colors.black.withOpacity(0.5),
+                          color: widget.task.isCompleted
+                              ? Colors.white
+                              : Colors.black.withOpacity(0.7),
                           fontWeight: FontWeight.w300,
                         ),
                       ),

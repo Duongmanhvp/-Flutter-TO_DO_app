@@ -12,7 +12,13 @@ class FAB extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context, CupertinoPageRoute(builder: (_) => const TaskScreen()));
+            context,
+            CupertinoPageRoute(
+                builder: (_) => const TaskScreen(
+                      titleController: null,
+                      descriptionController: null,
+                      task: null,
+                    )));
       },
       child: Material(
         borderRadius: BorderRadius.circular(10.0),
