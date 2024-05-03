@@ -9,13 +9,13 @@ emptyFieldsWarning(context) {
     msg: "Oops",
     subMsg: "You must fill all Fields!",
     corner: 20.0,
-    duration: 2000,
+    duration: 1000,
     padding: const EdgeInsets.all(20),
   );
 }
 
 /// Nothing Enter When user try to edit the current tesk
-nothingEnterOnUpdateTaskMode(context) {
+onUpdateTask(context) {
   return FToast.toast(
     context,
     msg: "Oops",
@@ -54,7 +54,7 @@ dynamic deleteAllTask(BuildContext context) {
       Navigator.pop(context);
     },
     onTapConfirm: () {
-      //BaseWidget.of(context).dataStore.box.clear();
+      BaseWidget.of(context).dataStore.box.clear();
       Navigator.pop(context);
     },
     panaraDialogType: PanaraDialogType.error,

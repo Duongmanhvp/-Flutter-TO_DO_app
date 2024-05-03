@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/main.dart';
 import 'package:todo/models/task.dart';
+import 'package:todo/utils/constants.dart';
 import 'package:todo/utils/strings.dart';
 import 'package:todo/view/tasks/components/date_time_picker.dart';
 import 'package:todo/view/tasks/components/text_form_field.dart';
@@ -62,6 +64,39 @@ class _TaskScreenState extends State<TaskScreen> {
     }
   }
 
+  dynamic isTaskUpdate() {
+    if (widget.titleController?.text != null &&
+        widget.descriptionController?.text != null) {
+      try {
+        widget.titleController?.text != title;
+        widget.descriptionController?.text != subTitle;
+
+        widget.task?.save();
+        Navigator.pop(context);
+      } catch (e) {
+        onUpdateTask(context);
+      }
+    } else {
+      if (title != null && subTitle != null) {
+        var task = Task.create(
+          title: title,
+          subTitle: subTitle,
+          createdTime: time,
+          createdDate: date,
+        );
+
+        BaseWidget.of(context).dataStore.addTask(task: task);
+        Navigator.pop(context);
+      } else {
+        emptyFieldsWarning(context);
+      }
+    }
+  }
+
+  dynamic deleteTask() {
+    return widget.task?.delete();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -83,51 +118,65 @@ class _TaskScreenState extends State<TaskScreen> {
                   // bottom
                   // delete current task
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: isTaskAlreadyExist()
+                        ? MainAxisAlignment.center
+                        : MainAxisAlignment.spaceAround,
                     children: [
                       //delete
-                      MaterialButton(
-                        color: Colors.white.withOpacity(.9),
-                        onPressed: () {},
-                        minWidth: 150,
-                        height: 50,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: const Row(
-                          children: [
-                            Icon(Icons.delete_outline),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              MyString.deleteStr,
-                              style: TextStyle(
-                                color: Colors.red,
+                      isTaskAlreadyExist()
+                          ? Container()
+                          : MaterialButton(
+                              color: Colors.white.withOpacity(.9),
+                              onPressed: () {
+                                deleteTask();
+                                Navigator.pop(context);
+                              },
+                              minWidth: 150,
+                              height: 50,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: const Row(
+                                children: [
+                                  Icon(Icons.delete_outline),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    MyString.deleteStr,
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
 
                       //add
                       MaterialButton(
                         color: Colors.blueAccent,
-                        onPressed: () {},
+                        onPressed: () {
+                          isTaskUpdate();
+                        },
                         minWidth: 150,
                         height: 50,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Icon(Icons.add),
-                            SizedBox(
+                            const Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            const SizedBox(
                               width: 5,
                             ),
                             Text(
-                              MyString.addTaskStr,
-                              style: TextStyle(
+                              isTaskAlreadyExist()
+                                  ? MyString.addTaskStr
+                                  : MyString.updateTaskStr,
+                              style: const TextStyle(
                                 color: Colors.white,
                               ),
                             ),

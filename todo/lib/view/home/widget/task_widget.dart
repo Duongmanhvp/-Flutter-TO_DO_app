@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/models/task.dart';
+import 'package:todo/view/tasks/task_screen.dart';
 
 class TaskWidget extends StatefulWidget {
   const TaskWidget({
@@ -35,7 +37,18 @@ class _TaskWidgetState extends State<TaskWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (ctx) => TaskScreen(
+              titleController: textEditingControllerTitle,
+              descriptionController: textEditingControllerSubTitle,
+              task: widget.task,
+            ),
+          ),
+        );
+      },
       child: AnimatedContainer(
         margin: const EdgeInsets.symmetric(
           horizontal: 16.0,
@@ -55,7 +68,10 @@ class _TaskWidgetState extends State<TaskWidget> {
         child: ListTile(
           // Check tasks
           leading: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              widget.task.isCompleted = !widget.task.isCompleted;
+              widget.task.save();
+            },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 600),
               decoration: BoxDecoration(
